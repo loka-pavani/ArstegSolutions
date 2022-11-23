@@ -1,0 +1,49 @@
+<h1>{{name}}</h1>
+<input type="text" [(ngModel)]="searchtext" placeholder="Search Todos" (change)="searchTodos($event.target.value)" class="search">
+<br>
+<br>
+<br>
+<div>
+  <table>
+    <thead>
+      <tr>
+        <td>TaskId</td>
+        <td>Task Name</td>
+        <td>Description</td>
+        <td>Estimated Hours</td>
+        <td>Status</td>
+        <td>Created On</td>
+        <td>Edit/Delete</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let todo of todos"  [ngStyle]="{'color': todo?.status==='Todo'?'grey': todo.status==='InProgress'?'blue':'green'}">
+        <td>{{todo.id}}</td>
+        <td>{{todo.name}}</td>
+        <td>{{todo.description}}</td>
+        <td>{{todo.estimatedHours}}</td>
+        <td>{{todo.status}}</td>
+        <td>{{todo.createdDate | date : 'M/d/yy, h:mm a'}}</td>
+        <td>
+          <select (change)="statusChange($event.target.value,todo)">
+            <option >ChangeStatus</option>
+            <option value="Todo" *ngIf="todo.status!='Todo'">Todo</option>
+            <option value="InProgress" *ngIf="todo.status!='InProgress'">In Progress</option>
+            <option value="Done" *ngIf="todo.status!='Done'">Done</option>
+          </select>
+          <button (click)="deleteTodo(todo.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<button *ngIf="!todoform" (click)="todoform=!todoform">Add Todo</button>
+<div *ngIf="todoform">
+  <input [(ngModel)]="newTodo" type="text" placeholder="New Todo">
+  <br>
+  <input [(ngModel)]="description" type="text" placeholder="Enter Description">
+  <br>
+  <input type="number" [(ngModel)]="estimatedHours" placeholder="Enter Hours">
+  <br>
+  <button (click)="addTodo()">Add Todo</button>
+</div>
